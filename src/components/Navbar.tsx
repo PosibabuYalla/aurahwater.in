@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
 
@@ -31,9 +32,8 @@ export default function Navbar() {
         scrolled ? 'bg-white/95 backdrop-blur-md border-b border-[#D85A00]/10 shadow-sm' : 'bg-transparent'
       }`}>
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex flex-col leading-none">
-            <span className="font-bebas text-3xl text-[#2C1A00] tracking-brand" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>AURAH</span>
-            <span className="text-[10px] text-[#aaa] tracking-widest uppercase" style={{ fontFamily: 'Inter, sans-serif' }}>Packaged Drinking Water</span>
+          <Link href="/" className="flex items-center">
+            <Image src="/images/logo.png" alt="AURAH" width={180} height={72} className="h-16 w-auto object-contain" priority />
           </Link>
 
           <div className="hidden md:flex items-center gap-8">

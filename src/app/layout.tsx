@@ -13,10 +13,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <title>AURAH — Packaged Drinking Water</title>
         <meta name="description" content="AURAH Premium Packaged Drinking Water. Pure Today. Promising Tomorrow. Distributing across Telangana & Andhra Pradesh." />
+        <link rel="icon" href="/icons/fav.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/icons/fav.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-        <link rel="preload" href="/models/Aurahwaterbottle3dl.glb" as="fetch" crossOrigin="anonymous" />
       </head>
       <body>
         <CustomCursor />

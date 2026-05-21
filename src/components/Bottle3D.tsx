@@ -1,70 +1,66 @@
 'use client'
-import { useRef, useEffect, useState, Suspense, useMemo } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { useGLTF, Environment } from '@react-three/drei'
-import * as THREE from 'three'
-
-useGLTF.preload('/models/Aurahwaterbottle3dl.glb')
-
-function BottleModel({ mouse }: { mouse: { x: number; y: number } }) {
-  const { scene } = useGLTF('/models/Aurahwaterbottle3dl.glb')
-  const groupRef = useRef<THREE.Group>(null)
-  const cloned = useMemo(() => scene.clone(), [scene])
-
-  useFrame((_, delta) => {
-    if (!groupRef.current) return
-    // Auto rotate
-    groupRef.current.rotation.y += delta * 0.4
-    // Mouse parallax tilt
-    groupRef.current.rotation.x += (mouse.y * 0.25 - groupRef.current.rotation.x) * 0.05
-  })
-
-  return (
-    <group ref={groupRef}>
-      <primitive object={cloned} />
-    </group>
-  )
-}
-
-function Loader() {
-  return (
-    <mesh>
-      <cylinderGeometry args={[0.3, 0.35, 2, 16]} />
-      <meshStandardMaterial color="#C8E8F5" transparent opacity={0.4} />
-    </mesh>
-  )
-}
+import Image from 'next/image'
+import { useEffect, useRef } from 'react'
 
 export default function Bottle3D() {
-  const [mouse, setMouse] = useState({ x: 0, y: 0 })
+  const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
     const onMove = (e: MouseEvent) => {
-      setMouse({
-        x: (e.clientX / window.innerWidth - 0.5) * 2,
-        y: (e.clientY / window.innerHeight - 0.5) * 2,
-      })
+      const cx = window.innerWidth / 2
+      const cy = window.innerHeight / 2
+      const dx = (e.clientX - cx) / cx
+      const dy = (e.clientY - cy) / cy
+      el.style.transform = `rotateY(${dx * 12}deg) rotateX(${-dy * 8}deg)`
     }
+
     window.addEventListener('mousemove', onMove)
     return () => window.removeEventListener('mousemove', onMove)
   }, [])
 
   return (
-    <Canvas
-      camera={{ position: [0, 0, 2], fov: 40 }}
-      style={{ background: 'transparent' }}
-      gl={{ alpha: true, antialias: false, powerPreference: 'high-performance' }}
-      dpr={[1, 1.5]}
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        perspective: '800px',
+      }}
     >
-      <ambientLight intensity={0.8} />
-      <directionalLight position={[5, 8, 5]} intensity={2} color="#FFF5EE" />
-      <directionalLight position={[-4, -2, -4]} intensity={0.6} color="#C8E8F5" />
-      <pointLight position={[2, 4, 3]} intensity={1.2} color="#FF9A4D" />
-      <pointLight position={[-2, -2, 2]} intensity={0.5} color="#89CCE8" />
-      <Environment preset="studio" />
-      <Suspense fallback={<Loader />}>
-        <BottleModel mouse={mouse} />
-      </Suspense>
-    </Canvas>
+      <div
+        ref={ref}
+        style={{
+          width: '100%',
+          height: '100%',
+          transition: 'transform 0.12s ease-out',
+          transformStyle: 'preserve-3d',
+          animation: 'bottle-shake 3.5s ease-in-out infinite',
+        }}
+      >
+        <Image
+          src="/images/500ml.png"
+          alt="AURAH 500ml Water Bottle"
+          fill
+          style={{ objectFit: 'contain', objectPosition: 'center' }}
+          priority
+        />
+      </div>
+
+      <style>{`
+        @keyframes bottle-shake {
+          0%   { transform: translateY(0px) rotate(-1deg); }
+          20%  { transform: translateY(-14px) rotate(1.2deg); }
+          40%  { transform: translateY(-6px) rotate(-0.8deg); }
+          60%  { transform: translateY(-18px) rotate(1deg); }
+          80%  { transform: translateY(-8px) rotate(-0.5deg); }
+          100% { transform: translateY(0px) rotate(-1deg); }
+        }
+      `}</style>
+    </div>
   )
 }

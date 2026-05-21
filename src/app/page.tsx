@@ -10,7 +10,7 @@ import TypedText from '@/components/TypedText'
 
 const HeroWaves = dynamic(() => import('@/components/HeroWaves'), { ssr: false })
 const WaterParticles = dynamic(() => import('@/components/WaterParticles'), { ssr: false })
-const Bottle3D = dynamic(() => import('@/components/Bottle3D'), { ssr: false })
+import Bottle3D from '@/components/Bottle3D'
 
 const marqueeItems = ['100% PURE', 'ADVANCED FILTRATION', 'BALANCED pH', 'ECO FRIENDLY', 'SAFE & HYGIENIC', 'PURE MINERALS']
 

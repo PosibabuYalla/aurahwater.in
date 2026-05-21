@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Phone, Mail, MapPin } from 'lucide-react'
 
 const InstagramIcon = () => (
@@ -21,7 +22,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           <div className="md:col-span-2">
-            <div className="font-bebas text-5xl text-[#2C1A00] tracking-brand mb-2" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>AURAH</div>
+            <Image src="/images/logo.png" alt="AURAH" width={300} height={120} className="h-24 w-auto object-contain mb-2" />
             <p className="text-[#888] text-sm mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>Pure Today. Promising Tomorrow.</p>
             <p className="text-[#888] text-sm leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
               Premium packaged drinking water by Teekshika Beverages.<br />
