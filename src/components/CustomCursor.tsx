@@ -40,7 +40,12 @@ export default function CustomCursor() {
     resize()
     window.addEventListener('resize', resize)
 
+    let lastMove = 0
     const onMove = (e: MouseEvent) => {
+      const now = performance.now()
+      if (now - lastMove < 16) return // ~60fps throttle
+      lastMove = now
+
       prev.current = { ...pos.current }
       pos.current = { x: e.clientX, y: e.clientY }
 
@@ -48,29 +53,31 @@ export default function CustomCursor() {
       const dy = pos.current.y - prev.current.y
       const speed = Math.sqrt(dx * dx + dy * dy)
 
-      // Trail dots
-      trail.current.push({
-        x: e.clientX + (Math.random() - 0.5) * 4,
-        y: e.clientY + (Math.random() - 0.5) * 4,
-        r: Math.random() * 3 + 1,
-        opacity: 0.6,
-      })
-
-      // Sprinkle drops based on speed
-      const count = Math.min(Math.floor(speed / 4), 5)
-      for (let i = 0; i < count; i++) {
-        const angle = Math.atan2(dy, dx) + (Math.random() - 0.5) * 1.8
-        const spd = Math.random() * speed * 0.4 + 1
-        drops.current.push({
-          x: e.clientX,
-          y: e.clientY,
-          vx: Math.cos(angle) * spd * (Math.random() * 0.6 + 0.2),
-          vy: Math.sin(angle) * spd * (Math.random() * 0.6 + 0.2) - Math.random() * 2,
+      if (trail.current.length < 40) {
+        trail.current.push({
+          x: e.clientX + (Math.random() - 0.5) * 4,
+          y: e.clientY + (Math.random() - 0.5) * 4,
           r: Math.random() * 3 + 1,
-          opacity: Math.random() * 0.7 + 0.3,
-          life: 0,
-          maxLife: Math.random() * 30 + 20,
+          opacity: 0.6,
         })
+      }
+
+      const count = Math.min(Math.floor(speed / 6), 3)
+      if (drops.current.length < 60) {
+        for (let i = 0; i < count; i++) {
+          const angle = Math.atan2(dy, dx) + (Math.random() - 0.5) * 1.8
+          const spd = Math.random() * speed * 0.4 + 1
+          drops.current.push({
+            x: e.clientX,
+            y: e.clientY,
+            vx: Math.cos(angle) * spd * (Math.random() * 0.6 + 0.2),
+            vy: Math.sin(angle) * spd * (Math.random() * 0.6 + 0.2) - Math.random() * 2,
+            r: Math.random() * 3 + 1,
+            opacity: Math.random() * 0.7 + 0.3,
+            life: 0,
+            maxLife: Math.random() * 30 + 20,
+          })
+        }
       }
     }
 

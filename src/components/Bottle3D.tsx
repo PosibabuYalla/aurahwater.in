@@ -1,7 +1,7 @@
 'use client'
-import { useRef, useEffect, useState, Suspense } from 'react'
+import { useRef, useEffect, useState, Suspense, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useGLTF, Environment, OrbitControls } from '@react-three/drei'
+import { useGLTF, Environment } from '@react-three/drei'
 import * as THREE from 'three'
 
 useGLTF.preload('/models/Aurahwaterbottle3dl.glb')
@@ -9,9 +9,7 @@ useGLTF.preload('/models/Aurahwaterbottle3dl.glb')
 function BottleModel({ mouse }: { mouse: { x: number; y: number } }) {
   const { scene } = useGLTF('/models/Aurahwaterbottle3dl.glb')
   const groupRef = useRef<THREE.Group>(null)
-
-  // Clone scene so multiple instances don't share state
-  const cloned = scene.clone()
+  const cloned = useMemo(() => scene.clone(), [scene])
 
   useFrame((_, delta) => {
     if (!groupRef.current) return
@@ -55,7 +53,8 @@ export default function Bottle3D() {
     <Canvas
       camera={{ position: [0, 0, 2], fov: 40 }}
       style={{ background: 'transparent' }}
-      gl={{ alpha: true, antialias: true }}
+      gl={{ alpha: true, antialias: false, powerPreference: 'high-performance' }}
+      dpr={[1, 1.5]}
     >
       <ambientLight intensity={0.8} />
       <directionalLight position={[5, 8, 5]} intensity={2} color="#FFF5EE" />
