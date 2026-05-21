@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --aurah-orange: #D85A00;
+  --aurah-orange-bright: #FF7A1A;
+  --aurah-orange-light: #FF9A4D;
+  --aurah-orange-tint: #FFF0E6;
+  --aurah-black: #0A0A0A;
+  --aurah-dark: #1A1A1A;
+  --aurah-surface: #2A2A2A;
+  --aurah-white: #FFFFFF;
+  --aurah-warm-white: #F5F0EB;
+  --aurah-brown-text: #2C1A00;
+  --aurah-water-light: #C8E8F5;
+  --aurah-water-mid: #89CCE8;
+  --aurah-water-deep: #3A8CB5;
+  --aurah-mint-tint: #E8F5F0;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: auto; }
+
+body {
+  background: #FFFFFF;
+  color: var(--aurah-brown-text);
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  cursor: none;
+  overflow-x: hidden;
+}
+
+/* ── Custom Cursor (canvas-based) ── */
+
+/* ── Noise Overlay ── */
+.noise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.04;
+}
+
+/* ── Typography ── */
+.font-bebas { font-family: 'Bebas Neue', sans-serif; }
+
+/* ── Scroll indicator ── */
+@keyframes bounce-dot {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+.bounce-dot { animation: bounce-dot 1.4s ease-in-out infinite; }
+
+/* ── Pulsing border ── */
+@keyframes pulse-border {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(216, 90, 0, 0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(216, 90, 0, 0); }
+}
+.pulse-border { animation: pulse-border 2s ease-in-out infinite; }
+
+/* ── Marquee ── */
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-left { animation: marquee-left 25s linear infinite; }
+
+/* ── Liquid fill button ── */
+.btn-liquid {
+  position: relative;
+  overflow: hidden;
+  background: var(--aurah-orange);
+  color: white;
+  border: none;
+  cursor: none;
+  transition: color 0.3s;
+}
+.btn-liquid::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 0;
+  background: var(--aurah-orange-bright);
+  transition: height 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 0;
+}
+.btn-liquid:hover::before { height: 100%; }
+.btn-liquid span { position: relative; z-index: 1; }
+
+/* ── Glass card ── */
+.glass {
+  background: rgba(255, 240, 230, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(216, 90, 0, 0.12);
+}
+
+/* ── Page transition ── */
+.page-wipe {
+  position: fixed; inset: 0;
+  background: var(--aurah-orange);
+  z-index: 9990;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* ── Fade-up ── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+
+/* ── Typed cursor blink ── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.typed-cursor { animation: blink 0.8s step-end infinite; }
+
+/* ── Orange glow ── */
+.orange-glow { filter: drop-shadow(0 0 50px rgba(216, 90, 0, 0.35)); }
+
+/* ── Ripple pin ── */
+@keyframes ripple-pin {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+/* ── Counter ── */
+.counter-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 6vw, 80px);
+  color: var(--aurah-orange-bright);
+  letter-spacing: 0.04em;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #F5F0EB; }
+::-webkit-scrollbar-thumb { background: var(--aurah-orange); border-radius: 2px; }
+
+section { position: relative; }
+
+/* ── Nav link ── */
+.nav-link {
+  position: relative;
+  color: var(--aurah-brown-text);
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 2px;
+  background: var(--aurah-orange-bright);
+  transition: width 0.3s ease;
+}
+.nav-link:hover::after, .nav-link.active::after { width: 100%; }
+.nav-link:hover { color: var(--aurah-orange-light); }
+
+/* ── Timeline ── */
+.timeline-line {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--aurah-orange), transparent);
+}
+
+/* ── Wave bg ── */
+@keyframes wave-move {
+  0% { transform: translateX(0) translateY(0); }
+  50% { transform: translateX(-20px) translateY(10px); }
+  100% { transform: translateX(0) translateY(0); }
+}
+.wave-bg { animation: wave-move 8s ease-in-out infinite; }
+
+/* ── Hero water wave SVG ── */
+@keyframes wave1 {
+  0% { d: path("M0,60 C150,100 350,0 500,60 C650,120 850,20 1000,60 C1150,100 1350,0 1500,60 L1500,200 L0,200 Z"); }
+  50% { d: path("M0,80 C150,20 350,120 500,80 C650,40 850,140 1000,80 C1150,20 1350,120 1500,80 L1500,200 L0,200 Z"); }
+  100% { d: path("M0,60 C150,100 350,0 500,60 C650,120 850,20 1000,60 C1150,100 1350,0 1500,60 L1500,200 L0,200 Z"); }
+}
+@keyframes wave2 {
+  0% { d: path("M0,80 C200,40 400,120 600,80 C800,40 1000,120 1200,80 C1350,50 1450,90 1500,80 L1500,200 L0,200 Z"); }
+  50% { d: path("M0,50 C200,100 400,20 600,50 C800,80 1000,10 1200,50 C1350,80 1450,30 1500,50 L1500,200 L0,200 Z"); }
+  100% { d: path("M0,80 C200,40 400,120 600,80 C800,40 1000,120 1200,80 C1350,50 1450,90 1500,80 L1500,200 L0,200 Z"); }
+}
+
+/* ── Hero float animation ── */
+@keyframes float-bottle {
+  0%, 100% { transform: translateY(0px) rotate(-1deg); }
+  50% { transform: translateY(-18px) rotate(1deg); }
+}
+.float-bottle { animation: float-bottle 4s ease-in-out infinite; }
+
+/* ── Shimmer line ── */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 30%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: shimmer 2.5s ease-in-out infinite;
+}
+
+/* ── Hero stat card ── */
+.hero-stat {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(216,90,0,0.15);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(216,90,0,0.08);
+}
+
+/* ── Floating drop ── */
+@keyframes drop-float {
+  0% { transform: translateY(0) scale(1); opacity: 0.7; }
+  100% { transform: translateY(-120px) scale(0.3); opacity: 0; }
+}
+
+/* ── Stagger delays ── */
+.delay-100 { transition-delay: 0.1s; }
+.delay-200 { transition-delay: 0.2s; }
+.delay-300 { transition-delay: 0.3s; }
+.delay-400 { transition-delay: 0.4s; }
+.delay-500 { transition-delay: 0.5s; }
