@@ -1,6 +1,5 @@
 'use client'
 import { useForm } from 'react-hook-form'
-import emailjs from '@emailjs/browser'
 import { useState } from 'react'
 import { Send, CheckCircle } from 'lucide-react'
 
@@ -8,17 +7,33 @@ interface FormData {
   name: string; phone: string; city: string; type: string; message: string
 }
 
+const MAKE_WEBHOOK = 'https://hook.eu1.make.com/21ydbj5aazm1kkqrcgxursvabe625jtd'
+
 export default function DistributionForm() {
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormData>()
   const [sent, setSent] = useState(false)
+  const [error, setError] = useState(false)
 
   const onSubmit = async (data: FormData) => {
+    setError(false)
     try {
-      await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', { ...data, to_email: 'teekshikabeverages@gmail.com', subject: 'Distribution Partner Enquiry' }, 'YOUR_PUBLIC_KEY')
+      const res = await fetch(MAKE_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: data.name,
+          phone: data.phone,
+          city: data.city,
+          type: data.type,
+          message: data.message || '',
+          submitted_at: new Date().toISOString(),
+        }),
+      })
+      if (!res.ok) throw new Error()
       setSent(true)
       reset()
     } catch {
-      alert('Failed to send. Please call 88862 39992 directly.')
+      setError(true)
     }
   }
 
@@ -34,6 +49,11 @@ export default function DistributionForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {error && (
+        <p className="text-center text-sm text-[#D85A00]" style={{ fontFamily: 'Inter, sans-serif' }}>
+          Something went wrong. Please call <a href="tel:8886239992" className="underline">88862 39992</a> directly.
+        </p>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <input {...register('name', { required: true })} placeholder="Full Name" className={inputClass} style={{ fontFamily: 'Inter, sans-serif' }} />
