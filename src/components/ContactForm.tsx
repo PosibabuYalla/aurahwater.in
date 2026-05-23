@@ -1,6 +1,5 @@
 'use client'
 import { useForm } from 'react-hook-form'
-import emailjs from '@emailjs/browser'
 import { useState } from 'react'
 import { Send, CheckCircle } from 'lucide-react'
 
@@ -13,13 +12,19 @@ export default function ContactForm() {
   const [sent, setSent] = useState(false)
 
   const onSubmit = async (data: FormData) => {
-    try {
-      await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', { ...data, to_email: 'teekshikabeverages@gmail.com' }, 'YOUR_PUBLIC_KEY')
-      setSent(true)
-      reset()
-    } catch {
-      alert('Failed to send. Please email us directly at teekshikabeverages@gmail.com')
-    }
+    const text = `*New Message — AURAH Website*
+
+*Name:* ${data.name}
+*Phone:* ${data.phone || 'N/A'}
+*Email:* ${data.email}
+
+*Message:*
+${data.message}`
+
+    const url = `https://wa.me/918886239992?text=${encodeURIComponent(text)}`
+    window.open(url, '_blank')
+    setSent(true)
+    reset()
   }
 
   const inputClass = `w-full bg-white border border-[#D85A00]/20 rounded-lg px-4 py-3 text-[#2C1A00] text-sm placeholder-[#bbb] focus:outline-none focus:border-[#D85A00] transition-colors`
